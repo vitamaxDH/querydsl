@@ -44,6 +44,9 @@ class MemberTest {
         em.persist(member2);
         em.persist(member3);
         em.persist(member4);
+//        em.persist(new Member(null, 100));
+//        em.persist(new Member("member5", 100));
+//        em.persist(new Member("member6", 100));
 
         // 초기화
         em.flush();
@@ -150,9 +153,6 @@ class MemberTest {
     @Test
     public void sort () throws Exception {
 
-        em.persist(new Member(null, 100));
-        em.persist(new Member("member5", 100));
-        em.persist(new Member("member6", 100));
 
         List<Member> result = queryFactory
                 .selectFrom(member)
@@ -167,9 +167,20 @@ class MemberTest {
         assertThat(member6.getUsername()).isEqualTo("member6");
         assertThat(memberNull.getUsername()).isNull();
 
+    }
 
-        // when
+    @Test
+    public void paging1 () throws Exception {
+        QueryResults<Member> result = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults();
 
-        // then
+        assertThat(result.getTotal()).isEqualTo(4);
+        assertThat(result.getLimit()).isEqualTo(2);
+        assertThat(result.getOffset()).isEqualTo(1);
+        assertThat(result.getResults().size()).isEqualTo(2);
     }
 }
