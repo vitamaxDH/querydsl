@@ -7,3 +7,4 @@
 ### 기본 문법
 - 시작 - JPQL vs Querydsl
 - 기본 Q - Type 활용
+- 검색 조건 쿼리
