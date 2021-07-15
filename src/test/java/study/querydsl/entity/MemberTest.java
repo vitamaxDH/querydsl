@@ -38,9 +38,9 @@ class MemberTest {
         em.persist(teamB);
 
         Member member1 = new Member("member1", 10, teamA);
-        Member member2 = new Member("member2", 20, teamB);
+        Member member2 = new Member("member2", 20, teamA);
 
-        Member member3 = new Member("member3", 30, teamA);
+        Member member3 = new Member("member3", 30, teamB);
         Member member4 = new Member("member4", 40, teamB);
         em.persist(member1);
         em.persist(member2);
@@ -266,5 +266,51 @@ class MemberTest {
 
     }
 
+    /**
+     * 예) 회원과 팀을 조인하면서, 팀 이름이 teamA 인 팀만 조인, 회원은 모두 조회
+     * @throws Exception
+     */
+    @Test
+    public void join_on_filtering () throws Exception {
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(member.team, team)
+                .on(team.name.eq("teamA"))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple= " + tuple);
+        }
+
+    }
+
+    /**
+     * 연관관계 없는 엔티티 외부 조인
+     * 회원의 이름이 팀 이름과 같은 회원 조회
+     * @throws Exception
+     */
+    @Test
+    public void join_on_no_relation () throws Exception {
+        em.persist(new Member("teamA"));
+        em.persist(new Member("teamB"));
+        em.persist(new Member("teamC"));
+
+        // DB 에 대한 학습이 더 필요함
+        // from 을 하는 테이블이 left 가 됨
+        // 그냥 join 은 innerJoin 이 되고
+        // left/right join 하면 외부 조인가능
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .rightJoin(team)
+                .on(member.username.eq(team.name))
+//                .where(member.username.eq(team.name))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
+    }
 
 }
