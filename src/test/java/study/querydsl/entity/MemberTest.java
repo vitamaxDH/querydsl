@@ -2,6 +2,7 @@ package study.querydsl.entity;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import java.util.List;
 
+import static com.querydsl.jpa.JPAExpressions.select;
 import static org.assertj.core.api.Assertions.assertThat;
 import static study.querydsl.entity.QMember.member;
 import static study.querydsl.entity.QTeam.team;
@@ -347,4 +349,98 @@ class MemberTest {
         assertThat(loaded).as("페치 조인 미적용").isTrue();
     }
 
+    /**
+     * 나이가 가장 많은 회원 조회
+     * @throws Exception
+     */
+    @Test
+    public void subQuery () throws Exception {
+
+        QMember memberSub = new QMember("memberSub");
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .where(member.age.eq(
+                        select(memberSub.age.max())
+                                .from(memberSub)
+                ))
+                .fetch();
+
+        assertThat(result).extracting("age")
+                .containsExactly(40);
+
+    }
+
+    /**
+     * 나이가 평균 이상인 회원
+     * @throws Exception
+     */
+    @Test
+    public void subQueryGoe () throws Exception {
+
+        QMember memberSub = new QMember("memberSub");
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .where(member.age.goe(
+                        select(memberSub.age.avg())
+                                      .from(memberSub)
+                ))
+                .fetch();
+
+        for (Member member1 : result) {
+            System.out.println("member1" + member1);
+        }
+
+        assertThat(result).extracting("age")
+                .containsExactly(30, 40);
+
+    }
+
+    /**
+     * 나이가 평균 이상인 회원
+     * @throws Exception
+     */
+    @Test
+    public void subQueryIn () throws Exception {
+
+        QMember memberSub = new QMember("memberSub");
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .where(member.age.in(
+                        select(memberSub.age)
+                                .from(memberSub)
+                                .where(memberSub.age.gt(10))
+                ))
+                .fetch();
+
+        for (Member member1 : result) {
+            System.out.println("member1" + member1);
+        }
+
+        assertThat(result).extracting("age")
+                .containsExactly(20, 30, 40);
+
+    }
+
+    // JPA 는 from 절 subquery 를 지원하지 않음.
+    // 1. 조인으로 변경
+    // 2. 쿼리 2번 분리
+    // 3. nativeSQL
+    @Test
+    public void selectSubquery () throws Exception {
+        QMember memberSub = new QMember("memberSub");
+        List<Tuple> result = queryFactory
+                .select(member.username,
+                        select(memberSub.age.avg())
+                        .from(memberSub)
+                )
+                .from(member)
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
+    }
 }
