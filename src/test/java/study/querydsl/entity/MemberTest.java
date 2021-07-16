@@ -503,5 +503,35 @@ class MemberTest {
         }
 
     }
-    
+
+    @Test
+    public void simpleProjection () throws Exception {
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+
+    // tuple 은 repository 안에서만 사용
+    // dto 로 내보내자
+    @Test
+    public void tupleProjection () throws Exception {
+        List<Tuple> result = queryFactory
+                .select(member.username, member.age)
+                .from(member)
+                .fetch();
+
+        for (Tuple tuple : result) {
+            String username = tuple.get(member.username);
+            Integer age = tuple.get(member.age);
+            System.out.println("username = " + username);
+            System.out.println("age = " + age);
+        }
+    }
 }
+
