@@ -25,3 +25,6 @@
 - 동적쿼리 - Where 다중 파라미터 사용
 - 수정, 삭제 벌크 연산
 - SQL function 호출하기
+
+### 실무 활용 - 순수 JPA 와 QueryDSL
+- 순수 JPA 리포지토리와 Querydsl
