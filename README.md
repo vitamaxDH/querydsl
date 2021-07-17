@@ -21,3 +21,4 @@
 ### 중급 문법
 - 프로젝션과 결과 반환 - 기본
 - 프로젝션과 결과 반환 - @QueryProjection
+- 동적쿼리 - BooleanBuilder 사용
