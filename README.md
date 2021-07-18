@@ -29,3 +29,5 @@
 ### 실무 활용 - 순수 JPA 와 QueryDSL
 - 순수 JPA 리포지토리와 Querydsl
 - 동적 쿼리와 성능 최적화 조회 - Builder 사용
+- 동적 쿼리와 성능 최적화 조회 - Where절 파라미터 사용
+ ____

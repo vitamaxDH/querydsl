@@ -73,15 +73,15 @@ class MemberJpaRepositoryTest {
         // 조건이 없을 경우 full scan 하기 때문에 limit 을 거는 등의
         // 추가 조건이 필요하다
         MemberSearchCondition condition = new MemberSearchCondition();
-//        condition.setAgeGoe(20);
-//        condition.setAgeLoe(40);
-//        condition.setTeamName("teamB");
+        condition.setAgeGoe(35);
+        condition.setAgeLoe(40);
+        condition.setTeamName("teamB");
 
-        List<MemberTeamDto> result = memberJpaRepository.searchByBuilder(condition);
+        List<MemberTeamDto> result = memberJpaRepository.search(condition);
         for (MemberTeamDto memberTeamDto : result) {
             System.out.println("result = " + result);
         }
 
-        assertThat(result).extracting("username").containsExactly("member3", "member4");
+        assertThat(result).extracting("username").containsExactly("member4");
     }
 }
