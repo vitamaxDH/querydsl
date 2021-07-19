@@ -37,3 +37,6 @@
 - 스프링 데이터 페이징 활용1 - Querydsl 페이징 연동
 - 스프링 데이터 페이징 활용2 - CountQuery 최적화
 - 스프링 데이터 페이징 활용3 - 컨트롤러 개발
+
+### 스프링 데이터 JPA가 제공하는 Querydsl 기능
+- 인터페이스 지원 - QuerydslPredicateExecutor
