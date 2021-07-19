@@ -40,3 +40,6 @@
 
 ### 스프링 데이터 JPA가 제공하는 Querydsl 기능
 - 인터페이스 지원 - QuerydslPredicateExecutor
+- Querydsl Web 지원
+- 리포지토리 지원 - QuerydslRepositorySupport
+- Querydsl 지원 클래스 직접 만들기
