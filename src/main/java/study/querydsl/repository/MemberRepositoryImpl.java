@@ -26,8 +26,8 @@ public class MemberRepositoryImpl extends QuerydslRepositorySupport implements M
 
     private final JPAQueryFactory queryFactory;
 
-    public MemberRepositoryImpl(Class<?> domainClass, EntityManager em) {
-        super(domainClass);
+    public MemberRepositoryImpl(EntityManager em) {
+        super(Member.class);
         this.queryFactory = new JPAQueryFactory(em);
     }
 

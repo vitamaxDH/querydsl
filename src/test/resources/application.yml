@@ -14,7 +14,7 @@ spring:
   #   show_sql: true
       format_sql: true
       use_sql_comment: true
-
+    database: h2
 logging.level:
   org.hibernate.SQL: debug
 # org.hibernate.type: trace
